@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @Api(tags = "Book")
 @RestController
@@ -53,5 +54,17 @@ public class BookController {
         bookDto.setName(book.getName());
         bookDto.setAuthor(book.getAuthor());
         return bookDto;
+    }
+
+    @ApiOperation(value = "刪除書本", notes = "刪除書本的內容")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "刪除成功")})
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping(value = "/v1/book/{bookId}")
+    public void delete(
+            @ApiParam(required = true, name = "bookId", value = "書本ID") @PathVariable Integer bookId) {
+        Book book = bookRepository.findByBookId(bookId);
+        if (Objects.nonNull(book)) {
+            bookRepository.deleteByBookId(bookId);
+        }
     }
 }
