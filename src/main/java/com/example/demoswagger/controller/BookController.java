@@ -22,7 +22,7 @@ public class BookController {
 
     @ApiOperation(value = "取得書本", notes = "列出所有書本")
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/v1/book", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/v1/book/getAllBooks", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Book> getAll() {
         return bookRepository.findAll();
     }
@@ -30,7 +30,7 @@ public class BookController {
     @ApiOperation(value = "新增書本", notes = "新增書本的內容")
     @ApiResponses(value = {@ApiResponse(code = 201, message = "存檔成功")})
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = "/v1/book", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/v1/book/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public BookDto create(
             @ApiParam(required = true, value = "書本內容") @RequestBody BookDto bookDto) {
         Book book = new Book();
@@ -50,16 +50,18 @@ public class BookController {
             @ApiParam(required = true, name = "bookId", value = "書本ID") @PathVariable Integer bookId) {
         Book book = bookRepository.findByBookId(bookId);
         BookDto bookDto = new BookDto();
-        bookDto.setBookId(book.getBookId());
-        bookDto.setName(book.getName());
-        bookDto.setAuthor(book.getAuthor());
+        if (Objects.nonNull(book)) {
+            bookDto.setBookId(book.getBookId());
+            bookDto.setName(book.getName());
+            bookDto.setAuthor(book.getAuthor());
+        }
         return bookDto;
     }
 
     @ApiOperation(value = "刪除書本", notes = "刪除書本的內容")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "刪除成功")})
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping(value = "/v1/book/{bookId}")
+    @DeleteMapping(value = "/v1/book/delete/{bookId}")
     public void delete(
             @ApiParam(required = true, name = "bookId", value = "書本ID") @PathVariable Integer bookId) {
         Book book = bookRepository.findByBookId(bookId);
