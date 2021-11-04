@@ -22,7 +22,7 @@ public class BookController {
 
     @ApiOperation(value = "取得書本", notes = "列出所有書本")
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/getAllBooks", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/getAll", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Book> getAll() {
         return bookRepository.findAll();
     }
